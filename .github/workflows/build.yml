@@ -41,7 +41,7 @@ jobs:
         
       - name: Build Artifact
         shell: cmd
-        id: artifact
+        id: artifacts
         run: call .\scripts\ArtifactBuild.cmd
 
       - name: Prepare release tag
@@ -57,13 +57,13 @@ jobs:
       - name: rename files
         shell: bash
         id: rename
-        run: cp "./${{ steps.artifact.outputs.artifact }}"  "./${{ steps.date2.outputs.date2 }}.${{ steps.artifact.outputs.artifact }}"
+        run: cp "./MCLauncher.zip"  "./${{ steps.date2.outputs.date2 }}.MCLauncher.zip"
 
       - name: Upload build to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./${{ steps.date2.outputs.date2 }}.${{ steps.artifact.outputs.artifact }}
+          file: ./${{ steps.date2.outputs.date2 }}.MCLauncher.zip
           tag: ${{ steps.date.outputs.date }}
           overwrite: true
           file_glob: true
