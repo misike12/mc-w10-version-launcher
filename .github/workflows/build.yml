@@ -42,7 +42,7 @@ jobs:
       - name: Build Artifact
         shell: cmd
         id: artifacts
-        run: call .\scripts\ArtifactBuild.cmd
+        run: powershell Compress-7Zip "x64\Release" -ArchiveFileName "MCLauncher.zip" -Format Zip
 
       - name: Prepare release tag
         shell: bash
@@ -64,7 +64,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           #file: ./${{ steps.date2.outputs.date2 }}.MCLauncher.zip
-          file: .\x64\Release\MCLauncher.zip
+          file: .\MCLauncher.zip
           tag: ${{ steps.date.outputs.date }}
           overwrite: true
           file_glob: true
