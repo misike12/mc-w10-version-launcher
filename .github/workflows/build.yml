@@ -68,4 +68,3 @@ jobs:
           tag: ${{ steps.date.outputs.date }}
           overwrite: true
           file_glob: true
-          shell: bash
