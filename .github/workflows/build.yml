@@ -42,7 +42,7 @@ jobs:
       - name: Build Artifact
         shell: cmd
         id: artifact
-        run: call .\ArtifactBuild.cmd
+        run: call .\scripts\ArtifactBuild.cmd
 
       - name: Prepare release tag
         shell: bash
@@ -67,3 +67,4 @@ jobs:
           tag: ${{ steps.date.outputs.date }}
           overwrite: true
           file_glob: true
+          shell: bash
