@@ -16,7 +16,6 @@ jobs:
   build:
     name: Build MCLauncher
     runs-on: windows-2019
-    strategy:
 
 
     steps:
@@ -58,7 +57,7 @@ jobs:
       - name: rename files
         shell: bash
         id: rename
-        run: cp "./${{ steps.artifact.outputs.artifact }}.zip"  "./${{ steps.date2.outputs.date2 }}.${{ steps.artifact.outputs.artifact }}.zip"
+        run: cp "./${{ steps.artifact.outputs.artifact }}"  "./${{ steps.date2.outputs.date2 }}.${{ steps.artifact.outputs.artifact }}"
 
       - name: Upload build to release
         uses: svenstaro/upload-release-action@v2
