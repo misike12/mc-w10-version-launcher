@@ -42,7 +42,7 @@ jobs:
       - name: Build Artifact
         shell: cmd
         id: artifacts
-        run: call .\scripts\ArtifactBuild.cmd
+        run: powershell Compress-7Zip "x64\Release" -ArchiveFileName "MCLauncher.zip" -Format Zip
 
       - name: Prepare release tag
         shell: bash
@@ -57,7 +57,7 @@ jobs:
       - name: rename files
         shell: bash
         id: rename
-        run: cp ".\MCLauncher.zip"  ".\${{ steps.date2.outputs.date2 }}.MCLauncher.zip"
+        run: cp "./MCLauncher.zip"  "./${{ steps.date2.outputs.date2 }}.MCLauncher.zip"
 
       - name: Upload build to release
         uses: svenstaro/upload-release-action@v2
