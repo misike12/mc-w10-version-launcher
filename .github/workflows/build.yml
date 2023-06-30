@@ -26,10 +26,16 @@ jobs:
         
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1  
+        
+   #   - name: Setup NuGet
+   #     uses: NuGet/setup-nuget@v1.0.2
+     
+   #   - name: Restore NuGet Packages
+   #     run: nuget restore MCLauncher.sln        
 
       - name: Build MCLauncher proj
         id: MCLauncher
-        run: msbuild MCLauncher.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+        run: msbuild MCLauncher.sln /p:Configuration=Release /p:Platform=x64
 
 
       - name: Prepare release tag
