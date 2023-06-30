@@ -1,0 +1,44 @@
+name: Build MCLauncher
+on:
+  #schedule:
+  #  - cron: "30 2 1 * *"
+  push:
+    branches: [buildtest]
+  workflow_dispatch:
+  repository_dispatch:
+    types: [build]
+
+concurrency: 
+  group: ${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build WSA
+    runs-on: windows-2019
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+
+      - name: Prepare release tag
+        id: date
+        run: echo "date=$(date +'v%Y-%m-%d')" >> $GITHUB_OUTPUT
+        
+      - name: add timestamp
+        id: date2
+        run: echo "date2=$(date +'v%Y_%m_%d')" >> $GITHUB_OUTPUT
+      
+  #    - name: rename files
+  #     shell: bash
+  #      id: rename
+  #      run: cp "./output/${{ steps.wsa.outputs.artifact }}.${{ matrix.compress-format }}"  "./output/${{ steps.date2.outputs.date2 }}.${{ steps.wsa.outputs.artifact }}.${{ matrix.compress-format }}"
+
+      - name: Upload build to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./output/${{ steps.date2.outputs.date2 }}.${{ steps.wsa.outputs.artifact }}.${{ matrix.compress-format }}
+          tag: ${{ steps.date.outputs.date }}
+          overwrite: true
+          file_glob: true
