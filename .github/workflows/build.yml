@@ -17,8 +17,7 @@ jobs:
     name: Build MCLauncher
     runs-on: windows-2019
     strategy:
-      matrix:
-        compress-format: [7z]
+
 
     steps:
       - name: Checkout
@@ -40,26 +39,32 @@ jobs:
       - name: Build MCLauncher proj
         id: MCLauncher
         run: msbuild MCLauncher.sln /p:Configuration=Release /p:Platform=x64
-
+        
+      - name: Build Artifact
+        shell: cmd
+        id: artifact
+        run: call .\ArtifactBuild.cmd
 
       - name: Prepare release tag
+        shell: bash
         id: date
         run: echo "date=$(date +'v%Y-%m-%d')" >> $GITHUB_OUTPUT
         
       - name: add timestamp
+        shell: bash
         id: date2
         run: echo "date2=$(date +'v%Y_%m_%d')" >> $GITHUB_OUTPUT
       
-  #    - name: rename files
-  #     shell: bash
-  #      id: rename
-  #      run: cp "./output/${{ steps.wsa.outputs.artifact }}.${{ matrix.compress-format }}"  "./output/${{ steps.date2.outputs.date2 }}.${{ steps.wsa.outputs.artifact }}.${{ matrix.compress-format }}"
+      - name: rename files
+        shell: bash
+        id: rename
+        run: cp "./${{ steps.artifact.outputs.artifact }}.zip"  "./${{ steps.date2.outputs.date2 }}.${{ steps.artifact.outputs.artifact }}.zip"
 
       - name: Upload build to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./output/${{ steps.date2.outputs.date2 }}.${{ steps.MCLauncher.outputs.artifact }}.${{ matrix.compress-format }}
+          file: ./${{ steps.date2.outputs.date2 }}.${{ steps.artifact.outputs.artifact }}
           tag: ${{ steps.date.outputs.date }}
           overwrite: true
           file_glob: true
