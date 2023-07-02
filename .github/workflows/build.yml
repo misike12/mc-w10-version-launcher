@@ -37,7 +37,7 @@ jobs:
 
       - name: Build MCLauncher proj
         id: MCLauncher
-        run: msbuild MCLauncher.sln /p:Configuration=Release /p:Platform=x64
+        run: msbuild MCLauncher.sln /t:Build;Clean /p:Configuration=Release /p:Platform=x64
         
       - name: Build Artifact
         shell: cmd
